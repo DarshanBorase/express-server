@@ -1,4 +1,4 @@
-const printDiamondPattern = (noOfRows) => {
+const printDiamondPattern = (noOfRows: number): void => {
   if (noOfRows >= 2 && noOfRows <= 9) {
     let pattern: string = '';
     for (let i = 1; i <= noOfRows; i++) {
