@@ -1,4 +1,6 @@
 import * as express from 'express';
+import * as bodyParser from 'body-parser';
+import routes from './libs/routes';
 export default class Server {
     app: express.Express;
     constructor(private config) {
@@ -8,9 +10,18 @@ export default class Server {
      * This method use to set health-check route
      */
     setupRoutes() {
-      this.app.get('/health-check', (req, res) => {
-          res.send("'I am OK");
-      });
+        this.app.get('/health-check', (req, res, next) => {
+            res.send("'I am OK");
+        });
+            this.app.use(routes.notFoundRoute);
+            this.app.use(routes.errorHandler);
+    }
+    initBodyParser() {
+        // parse application/x-www-form-urlencoded
+        this.app.use(bodyParser.urlencoded({ extended: false }));
+
+        // parse application/json
+        this.app.use(bodyParser.json());
     }
 
     /**
@@ -26,9 +37,9 @@ export default class Server {
      * This method use to listen port
      */
     run() {
-        const {port, env} = this.config;
+        const { port, env } = this.config;
         this.app.listen(port, (err) => {
-            if (err)console.log('Error in server setup');
+            if (err) console.log('Error in server setup');
             console.log(`app running on ${port} of ${env} successfully`);
         });
     }
