@@ -32,7 +32,7 @@ class Trainee {
         return res.status(200).send({ message: 'Fetched data Successfully', data: trainee });
     }
     post(req: Request, res: Response, next: Next) {
-        // console.log(req.body);
+
         const {id, name, designation, location } = req.body;
         if (!name) {
             return res.status(400).send({ message: 'required trainee details', error: 'error msg' });
@@ -40,15 +40,13 @@ class Trainee {
         return res.status(200).send({ message: 'trainee added sucessfully' });
     }
     put = (req: Request, res: Response): any => {
-        // get raw trainee data
         const trainee = this.rawTraineeData();
-        // get request params
+
         const requestName = req.params.name;
-        // find trainee by name
+
         const data = trainee.find((post, index) => {
           if (post.name === requestName) return true;
         });
-        // update designation of trainee
         data.designation = 'Associate Engineer';
         return res.status(200).send({ message: 'Updated trainee successfully', data: trainee });
     }
