@@ -44,14 +44,6 @@ export default Object.freeze
             string: true,
             in: ['param']
         },
-        // dataToUpdate:
-        // {
-        //     in: ['body'],
-        //     exists: true,
-        //     isObject: true,
-        //     // custom: dataToUpdate => {
-        //     //     console.log('updtaed');
-        //     // },
-        // }
+
     }
 });
