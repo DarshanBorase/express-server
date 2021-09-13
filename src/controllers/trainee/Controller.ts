@@ -1,5 +1,6 @@
 import { Request, Response, Next } from 'express';
-import { request } from 'http';
+import * as jwt from 'jsonwebtoken';
+import config from '../../config/configuration';
 
 class Trainee {
     get(req: Request, res: Response, next: Next) {
@@ -88,6 +89,11 @@ class Trainee {
         }
         const deletedData = this.rawTraineeData().filter(person => person.name !== requestName );
         return res.status(200).send({ message: 'deleted trainee successfully', data: deletedData });
+    }
+    generateToken(req: Request, res: Response, next: Next) {
+    const token = jwt.sign(req.body, config.secret, { expiresIn: '12h' });
+    console.log(token);
+    return res.status(200).send({ message: 'Token successfully created', data: { token }, status: 'success'});
     }
 }
 

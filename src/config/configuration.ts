@@ -12,7 +12,8 @@ const envVarsSchema = Joi.object({
 const {value: envVars} = envVarsSchema.validate(process.env);
 const configuration: IConfig = Object.freeze({
     env: envVars.NODE_ENV,
-    port: envVars.PORT
+    port: envVars.PORT,
+    secret: envVars.TOKEN_SECRET,
 });
 
 export default configuration;
