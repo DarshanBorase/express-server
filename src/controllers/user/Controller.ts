@@ -1,86 +1,85 @@
 import { Request, Response, Next } from 'express';
+import UserRepository from '../../repositories/user/UserRepository';
 import * as jwt from 'jsonwebtoken';
 import config from '../../config/configuration';
-import UserRepository from '../../repositories/user/UserRepository';
 
-class User {
-    get = (req: Request, res: Response): any => {
+class UserController {
+  get = async (request: Request, response: Response): Promise < Response > => {
         const userRepository: UserRepository = new UserRepository();
         try {
             const query = {
-                role: req.body.role
+                role: request.body.role
             };
-            userRepository.find(query, (error, result) => {
-                return res
-                    .status(200)
-                    .send({ message: 'Fetched data successfully', data: result });
-            });
-        } catch (error) {
-            return res
-                .status(400)
-                .json({ message: 'Bad Request', status: error });
-        }
-    };
-    post = (req: Request, res: Response): any => {
-        const userRepository: UserRepository = new UserRepository();
-        try {
-            const data = {
-                name: req.body.name,
-                email: req.body.email,
-                role: req.body.role,
-                password: req.body.password
-            };
-            userRepository.create(data);
-            return res
+            const result = await userRepository.find(query);
+                return response
                 .status(200)
-                .send({ message: 'New Trainee Created Successfully' });
+                .send({ message: 'Fetched data successfully', data: result });
         } catch (error) {
-            return res
-                .status(400)
-                .json({ message: 'Bad Request', status: error });
+            return response
+            .status(400)
+            .json({ status: 'Bad Request', message: error });
         }
-    };
+  };
 
-    put = (req: Request, res: Response): any => {
-        const userRepository: UserRepository = new UserRepository();
-        try {
-            const data = {
-                _id: req.params.id,
-                name: req.body.name,
-                email: req.body.email,
-                role: req.body.role,
-                password: req.body.password
-            };
-            userRepository.update(data).then((error, result) => {
-                return res
-                    .status(200)
-                    .send({ message: 'Updated trainee successfully', data: result });
-            });
-        } catch (error) {
-            return res
-                .status(400)
-                .json({ message: 'Bad Request', status: error });
-        }
-    };
+  post = async (request: Request, response: Response): Promise < Response > => {
+    const userRepository: UserRepository = new UserRepository();
+    try {
+        const data = {
+            name: request.body.name,
+            email: request.body.email,
+            role: request.body.role,
+            password: request.body.password
+        };
+        await userRepository.create(data);
+        return response
+            .status(200)
+            .send({ message: 'New Trainee Created Successfully'});
+    } catch (error) {
+      return response
+        .status(400)
+        .json({ status: 'Bad Request', message: error });
+    }
+  };
 
-    delete = (req: Request, res: Response): any => {
-        const userRepository: UserRepository = new UserRepository();
-        try {
-            const _id = req.params.id;
-            userRepository.delete({ _id });
-            return res
+  put = async (request: Request, response: Response): Promise < Response > => {
+    const userRepository: UserRepository = new UserRepository();
+    try {
+        const data = {
+            _id : request.params.id,
+            name: request.body.name,
+            email: request.body.email,
+            role: request.body.role,
+            password: request.body.password
+        };
+        const result = await userRepository.update(data);
+            return response
                 .status(200)
-                .send({ message: 'deleted trainee successfully' });
-        } catch (error) {
-            return res
-                .status(400)
-                .json({ status: 'Bad Request', message: error });
-        }
-    };
+                .send({ message: 'Updated trainee successfully', data: result});
+    } catch (error) {
+        return response
+          .status(400)
+          .json({ status: 'Bad Request', message: error });
+    }
+  };
+
+    delete = async (request: Request, response: Response): Promise < Response > => {
+    const userRepository: UserRepository = new UserRepository();
+    try {
+        const _id = request.params.id;
+        await userRepository.delete({_id});
+        return response
+        .status(200)
+        .send({ message: 'deleted trainee successfully'});
+    } catch (error) {
+      return response
+        .status(400)
+        .json({ status: 'Bad Request', message: error });
+    }
+  };
     createToken = (req: Request, res: Response, next: Next) => {
-        const token = jwt.sign(req.body, config.secret, { expiresIn: '10h' });
-        console.log(token);
-        return res.status(200).send({ message: 'Token successfully created', data: { token }, status: 'success'});
-        }
+    const token = jwt.sign(req.body, config.secret, { expiresIn: '10h' });
+    console.log(token);
+    return res.status(200).send({ message: 'Token successfully created', data: { token }, status: 'success'});
+    }
 }
-export default new User();
+export default new UserController ();
