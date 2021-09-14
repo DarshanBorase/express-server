@@ -1,7 +1,8 @@
-import { constants } from 'buffer';
+
 
 export const TRAINEES: string = 'trainees';
 export const TRAINEE: string = 'trainee';
+
 export const USER: string = 'user';
 export const TRAINER: string = 'trainer';
 export const HEAD_TRAINER: string = 'head-trainer';
@@ -15,6 +16,8 @@ export const permissions: any = {
     },
     [USER]: {
         read: [TRAINEE, TRAINER, HEAD_TRAINER],
+        write : [TRAINEE, TRAINER, HEAD_TRAINER],
+        delete : [HEAD_TRAINER],
     },
 };
-export default constants;
+// export default constants;

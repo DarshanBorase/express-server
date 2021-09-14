@@ -1,4 +1,4 @@
-import { permissions } from '../libs/constant';
+import { permissions } from './constant';
 
 /**
  *
