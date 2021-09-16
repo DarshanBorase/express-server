@@ -24,6 +24,14 @@ export default () => {
                     password: 'Darshan@123'
                 }
             );
+            userRepository.create(
+                {
+                    name: 'Darshanialabnur',
+                    role: 'trainee',
+                    email: 'Darshani.alabnur@successive.tech',
+                    password: 'Darshani@123'
+                }
+            );
         }
     }).catch(err => console.log(err));
 };
