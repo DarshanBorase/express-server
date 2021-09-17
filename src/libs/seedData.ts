@@ -4,7 +4,6 @@ import * as bcrypt from 'bcrypt';
 import helper from '../controllers/helper';
 import config from '../config/configuration';
 
-
 export default async () => {
     const userRepository: UserRepository = new UserRepository();
     const count = await userRepository.count();
@@ -30,4 +29,5 @@ export default async () => {
         });
     }
 };
+
 
