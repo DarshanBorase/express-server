@@ -7,11 +7,12 @@ class UserController {
   get = async (request: Request, response: Response): Promise < Response > => {
         const userRepository: UserRepository = new UserRepository();
         try {
-          const {id , emailId} = request.user;
+            const {id , emailID} = request.user;
             const query = {
                 _id : id,
-                email: emailId
-          };
+                email: emailID
+            };
+            console.log(query);
             const result = await userRepository.find(query);
                 return response
                 .status(200)
@@ -30,7 +31,8 @@ class UserController {
             name: request.body.name,
             email: request.body.email,
             role: request.body.role,
-            password: request.body.password
+            password: request.body.password,
+            deletedAt: undefined
         };
         await userRepository.create(data);
         return response
@@ -46,13 +48,10 @@ class UserController {
   put = async (request: Request, response: Response): Promise < Response > => {
     const userRepository: UserRepository = new UserRepository();
     try {
-        const data = {
-            _id : request.params.id,
-            name: request.body.name,
-            email: request.body.email,
-            role: request.body.role,
-            password: request.body.password
-        };
+      const data = {
+        originalId : request.params.id,
+        ...request.body
+    };
         const result = await userRepository.update(data);
             return response
                 .status(200)
@@ -68,7 +67,7 @@ class UserController {
     const userRepository: UserRepository = new UserRepository();
     try {
         const _id = request.params.id;
-        await userRepository.delete({_id});
+        await userRepository.delete({_id}, {originalID: _id});
         return response
         .status(200)
         .send({ message: 'deleted trainee successfully'});
@@ -84,4 +83,4 @@ class UserController {
     return res.status(200).send({ message: 'Token successfully created', data: { token }, status: 'success'});
     }
 }
-export default new UserController ();
+export default new UserController();
