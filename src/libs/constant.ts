@@ -2,7 +2,8 @@
 
 export const TRAINEES: string = 'trainees';
 export const TRAINEE: string = 'trainee';
-
+export const LIMIT = 10;
+export const SKIP = 0;
 export const USER: string = 'user';
 export const TRAINER: string = 'trainer';
 export const HEAD_TRAINER: string = 'head-trainer';
