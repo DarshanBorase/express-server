@@ -7,7 +7,7 @@ const userRepository: UserRepository = new UserRepository();
 
 export default (moduleName, permissionType) => async(req, res, next) => {
     const token = req.header('Authorization');
-    // console.log(token);
+    console.log(token);
     if (!token) {
         next({ error : 'Unauthorized', message : 'Token not found', status : 403});
     }
@@ -22,21 +22,21 @@ export default (moduleName, permissionType) => async(req, res, next) => {
     catch (err) {
         next({ error : 'Unauthorized', message : 'User not Authorized', status : 403});
     }
-    console.log('User is', user);
+    // console.log('User is', user);
 
     if (!user) {
-        next({ error : 'Unauthorized', message : 'User not Authorized', status : 403});
+        next({ error : 'Unauthorized User', message : 'User not Authorized', status : 403});
     }
 
     const userData = await userRepository.findOne({_id: user.id});
-
+    console.log(userData);
     if (!userData) {
-        next({ error : 'Unauthorized', message : 'user not Authorized', status : 403});
+        next({ error : 'Unauthorized User Data', message : 'Permisssion Denied', status : 403});
     }
 
-    console.log(moduleName, permissionType, user.role);
-    if (!hasPermission( moduleName, user.role, permissionType )) {
-        next({ error : 'Unauthorized data', message : 'Permisssion Denied', status : 403});
+    // console.log(moduleName, permissionType, user.role);
+    if (!hasPermission( moduleName, userData.role, permissionType )) {
+        next({ error : 'Unauthorized', message : 'Permisssion Denied', status : 403});
     }
     req.user = user;
     next();

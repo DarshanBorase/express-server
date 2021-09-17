@@ -1,10 +1,18 @@
+import { isNumber } from 'util';
+
 export default Object.freeze
 ({
     create: {
         id: {
-            exists: true,
-            string: true,
-            in: ['body'],
+            custom: {
+                options: (id: number) => {
+                  return !isNumber(id);
+                },
+              },
+              errorMessage: 'Bad audience id Format',
+              in: ['body'],
+              optional: false,
+              required: true,
 
         },
         name: {
@@ -15,7 +23,7 @@ export default Object.freeze
         }
     },
     delete: {
-        name: {
+        id: {
             exists: true,
             string: true,
             errorMessage: 'Id is required',
@@ -25,25 +33,20 @@ export default Object.freeze
     get: {
         skip: {
             exists: false,
-            default: 0,
-            number: true,
-            in: ['query'],
-            errorMessage: 'Skip is invalid',
+            in: ['body'],
+            errorMessage: 'Skip is required',
         },
         limit: {
             exists: false,
-            default: 10,
-            number: true,
-            in: ['query'],
-            errorMessage: 'Limit is invalid',
+            in: ['body'],
+            errorMessage: 'Limit is required',
         }
     },
-    update: {
-        name: {
+    dataToUpdate: {
+        id: {
             exists: true,
             string: true,
             in: ['param']
         },
-
     }
 });

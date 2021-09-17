@@ -23,8 +23,7 @@ export default async () => {
                 name: 'Darshan Borase',
                 role: 'trainee',
                 email: 'Darshan.borase@successive.tech',
-                password: passwordHash
-            }
+                password: passwordHash}
         ];
         seedData.forEach(async user => {
             await userRepository.create(user);

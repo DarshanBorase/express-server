@@ -11,7 +11,7 @@ const router = Router();
 
 router.get('/', authMiddleware(USER, 'read'), validationHandler(validation.get), User.get);
 router.post('/', authMiddleware(USER, 'write'), validationHandler(validation.create), User.post);
-router.put('/:id', authMiddleware(USER, 'write'), validationHandler(validation.update), User.put);
+router.put('/:id', authMiddleware(USER, 'write'), validationHandler(validation.dataToUpdate), User.put);
 router.delete('/:id', validationHandler(validation.delete), User.delete);
 router.post('/createToken', User.createToken);
 
