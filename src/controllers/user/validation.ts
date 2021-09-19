@@ -30,15 +30,21 @@ export default Object.freeze
             in: ['param']
         }
     },
-    get: {
+    getAll: {
         skip: {
             exists: false,
-            in: ['body'],
+            isInt: true,
+            in: ['query'],
+            toInt: true,
+            optional: true,
             errorMessage: 'Skip is required',
         },
         limit: {
             exists: false,
-            in: ['body'],
+            isInt: true,
+            in: ['query'],
+            toInt: true,
+            optional: true,
             errorMessage: 'Limit is required',
         }
     },
