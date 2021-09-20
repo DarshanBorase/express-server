@@ -1,5 +1,4 @@
 import * as mongoose from 'mongoose';
-
 export default class VersionableRepository<D extends mongoose.Document, M extends mongoose.Model<D>> {
 
     private model: M;
@@ -27,7 +26,7 @@ export default class VersionableRepository<D extends mongoose.Document, M extend
         return this.model.count(finalQuery);
     }
 
-    protected create(data: any): Promise<D> {
+    protected async create(data: any): Promise<D> {
         console.log('UserRepository::create create', data);
         const id = VersionableRepository.createObjectId();
         console.log(id);

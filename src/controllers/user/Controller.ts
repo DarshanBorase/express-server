@@ -3,6 +3,7 @@ import UserRepository from '../../repositories/user/UserRepository';
 import * as jwt from 'jsonwebtoken';
 import config from '../../config/configuration';
 import * as bcrypt from 'bcrypt';
+import { TRAINEE, LIMIT, SKIP } from '../../libs/constant';
 
 class UserController {
   get = async (request: Request, response: Response): Promise < Response > => {
@@ -24,7 +25,23 @@ class UserController {
             .json({ status: 'Bad Request', message: error });
         }
   };
-
+  getAll = async (request: Request, response: Response): Promise<Response> => {
+    const userRepository: UserRepository = new UserRepository();
+    try {
+        const { skip = SKIP, limit = LIMIT, sort = { createdAt: -1 } } = request.query;
+        console.log({ skip, limit, sort });
+        const _result = await userRepository.find({ role: TRAINEE }, undefined, { skip, limit, sort });
+        const _count = await userRepository.count();
+        const _data = [{ count: _count, result: _result }];
+        return response
+            .status(200)
+            .send({ message: 'Fetched data successfully', data: _data });
+    } catch (error) {
+        return response
+            .status(400)
+            .json({ status: 'Bad Request', message: error });
+    }
+};
   post = async (request: Request, response: Response): Promise < Response > => {
     const userRepository: UserRepository = new UserRepository();
     try {

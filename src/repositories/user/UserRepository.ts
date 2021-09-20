@@ -2,6 +2,7 @@ import * as mongoose from 'mongoose';
 import { userModel } from './UserModel';
 import IUserModel from './IUserModel';
 import VersionableRepository from '../versionable/VersionableRepository';
+import helper from '../../controllers/helper';
 export default class UserRepository extends VersionableRepository <IUserModel, mongoose.Model<IUserModel>> {
     constructor() {
         super(userModel);
@@ -20,11 +21,17 @@ export default class UserRepository extends VersionableRepository <IUserModel, m
     public count(): mongoose.Query<number, mongoose.EnforceDocument<IUserModel, {}>> {
         return super.count();
     }
-    public create(data: any): Promise<IUserModel> {
+    public async create(data: any): Promise<IUserModel> {
         console.log('UserRepository::create create', data);
+        const hashPassword = await helper.hashPassword(data.password);
+        data.password = hashPassword;
         return super.create(data);
     }
-    public update(data: any): Promise<IUserModel> {
+    public async update(data: any): Promise<IUserModel> {
+        if (data.hasOwnProperty('password')) {
+            const hashPassword = await helper.hashPassword(data.password);
+            data.password = hashPassword;
+        }
         return super.update(data);
     }
     public delete(filter, data: any) {
