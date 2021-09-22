@@ -4,4 +4,5 @@ export interface IConfig {
     secret: string;
     mongoUrl: string;
     password: string;
+
 }
