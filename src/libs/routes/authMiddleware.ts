@@ -6,13 +6,16 @@ import hasPermission from '../hasPermission';
 const userRepository: UserRepository = new UserRepository();
 
 export default (moduleName, permissionType) => async(req, res, next) => {
-    const token = req.header('Authorization');
+    let token = req.header('Authorization');
     console.log(token);
     if (!token) {
         next({ error : 'Unauthorized', message : 'Token not found', status : 403});
     }
+    if (token.startsWith('Bearer ')) {
+        token = token.substring(7, token.length);
+    }
     const { secret } = config;
-    console.log(secret);
+    // console.log(secret);
 
     let user;
     try {
@@ -34,7 +37,6 @@ export default (moduleName, permissionType) => async(req, res, next) => {
         next({ error : 'Unauthorized User Data', message : 'Permisssion Denied', status : 403});
     }
 
-    // console.log(moduleName, permissionType, user.role);
     if (!hasPermission( moduleName, userData.role, permissionType )) {
         next({ error : 'Unauthorized', message : 'Permisssion Denied', status : 403});
     }
