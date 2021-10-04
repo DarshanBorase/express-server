@@ -1,4 +1,5 @@
 import UserRepository from '../repositories/user/UserRepository';
+import ReviewerRepository from '../repositories/reviewer/ReviewerRepository';
 import { BCRYPT_SALT_ROUNDS } from './constant';
 import * as bcrypt from 'bcrypt';
 import helper from '../controllers/helper';
@@ -23,6 +24,18 @@ export default async () => {
                 name: 'Darshan Borase',
                 role: 'trainee',
                 email: 'Darshan.Borase@successive.tech',
+                password: config.password,
+        },
+            {
+                name: 'Dhanashri C',
+                role: 'Trainee',
+                email: 'Dhanashri.C@successive.tech',
+                password: config.password,
+        },
+            {
+                name: 'Darshani alabnur',
+                role: 'trainee',
+                email: 'Darshani.alabnur@successive.tech',
                 password: config.password,
             }
         ];
