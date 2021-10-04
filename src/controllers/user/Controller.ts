@@ -5,7 +5,7 @@ import config from '../../config/configuration';
 import * as bcrypt from 'bcrypt';
 import { TRAINEE, LIMIT, SKIP } from '../../libs/constant';
 
-class UserController {
+class User {
   get = async (request: Request, response: Response): Promise < Response > => {
         const userRepository: UserRepository = new UserRepository();
         try {
@@ -28,9 +28,20 @@ class UserController {
   getAll = async (request: Request, response: Response): Promise<Response> => {
     const userRepository: UserRepository = new UserRepository();
     try {
-        const { skip = SKIP, limit = LIMIT, sort = { createdAt: -1 } } = request.query;
+        const { search, skip = SKIP, limit = LIMIT, sort = { createdAt: -1 } } = request.query;
         console.log({ skip, limit, sort });
-        const _result = await userRepository.find({ role: TRAINEE }, undefined, { skip, limit, sort });
+        const query: any = {
+          role: TRAINEE,
+          $or: [
+              {name : {$regex : new RegExp(search), $options: 'i'}},
+              {email : {$regex : new RegExp(search), $options: 'i'}}
+          ]
+        };
+        console.log('query', query);
+        const _result = await userRepository.find(
+            query,
+            undefined,
+            { skip, limit, sort });
         const _count = await userRepository.count();
         const _data = [{ count: _count, result: _result }];
         return response
@@ -81,11 +92,11 @@ class UserController {
     }
   };
 
-    delete = async (request: Request, response: Response): Promise < Response > => {
+  delete = async (request: Request, response: Response): Promise < Response > => {
     const userRepository: UserRepository = new UserRepository();
     try {
         const _id = request.params.id;
-        await userRepository.delete({_id}, {originalID: _id});
+        await userRepository.delete({_id}, {originalID: _id, deletedAt: Date()});
         return response
         .status(200)
         .send({ message: 'deleted trainee successfully'});
@@ -130,4 +141,4 @@ class UserController {
     }
   };
 }
-export default new UserController();
+export default new User();

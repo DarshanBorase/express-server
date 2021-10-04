@@ -8,13 +8,16 @@ const userRepository: UserRepository = new UserRepository();
 const reviewerRepository: ReviewerRepository = new ReviewerRepository();
 
 export default (moduleName, permissionType) => async(req, res, next) => {
-    const token = req.header('Authorization');
+    let token = req.header('Authorization');
     console.log(token);
     if (!token) {
         next({ error : 'Unauthorized', message : 'Token not found', status : 403});
     }
+    if (token.startsWith('Bearer ')) {
+        token = token.substring(7, token.length);
+    }
     const { secret } = config;
-    console.log(secret);
+    // console.log(secret);
 
     let user;
     try {
@@ -36,8 +39,12 @@ export default (moduleName, permissionType) => async(req, res, next) => {
         next({ error : 'Unauthorized trainee Data', message : 'Permisssion Denied', status : 403});
     }
 
+<<<<<<< HEAD
     // console.log(moduleName, permissionType, user.role);
     if (!hasPermission( moduleName, traineeData.role, permissionType )) {
+=======
+    if (!hasPermission( moduleName, userData.role, permissionType )) {
+>>>>>>> 7567a65bdae3c30821be016ea44f31ed81debe56
         next({ error : 'Unauthorized', message : 'Permisssion Denied', status : 403});
     }
     req.user = user;
